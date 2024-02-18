@@ -19,13 +19,16 @@ namespace Book.Service.Service
         {
             var books = await _bookReposotory.GetBooks();
 
-            return books.Select(b => new GetBooksResponseDto
+            var bookdto = books.Select(b => new GetBooksResponseDto
             {
                 Id = b.Id,
                 Title = b.Title,
-                Description = b.Description,
-                AuthorId = b.AuthorId
-            }).ToList();
+                Sort = b.Sort
+            })
+            .OrderBy(b => b.Sort)
+            .ToList();
+
+            return bookdto;
         }
 
         public async Task<GetBookResponseDto> GetBook(int id)
@@ -37,10 +40,11 @@ namespace Book.Service.Service
                 Id = book.Id,
                 Title = book.Title,
                 Description = book.Description,
+                Sort = book.Sort,
                 AuthorId = book.AuthorId
             };
         }
-        
+
         public async Task<int> CreateBook(CreateBookRequestDto request)
         {
             var book = await _bookReposotory.CreateBook(request);

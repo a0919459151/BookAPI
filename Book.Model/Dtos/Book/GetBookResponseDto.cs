@@ -8,6 +8,8 @@
 
         public string? Description { get; set; }
 
+        public int? Sort { get; set; }
+
         public int? AuthorId { get; set; }
     }
 }

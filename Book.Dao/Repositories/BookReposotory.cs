@@ -31,13 +31,23 @@ namespace Book.Dao.Repositories
             return book;
         }
 
+        public async Task<int> GetBookMaxSort()
+        {
+            var maxSort = await _context.Books.MaxAsync(b => (int?)b.Sort) ?? 1;
+
+            return maxSort;
+        }
+
         public async Task<BookEntity> CreateBook(CreateBookRequestDto request)
         {
+            var bookMaxSort = await GetBookMaxSort();
+
             var book = new BookEntity
             {
                 Title = request.Title,
                 Description = request.Description,
-                AuthorId = request.AuthorId
+                AuthorId = request.AuthorId,
+                Sort = bookMaxSort + 1
             };
 
             await _context.Books.AddAsync(book);
@@ -63,13 +73,6 @@ namespace Book.Dao.Repositories
 
         public async Task SortBook(SortBookRequestDto request)
         {
-            // Query destination book
-            var destinationBook = await _context.Books.FirstOrDefaultAsync(b => b.Id == request.DestinationId);
-            if (destinationBook == null)
-            {
-                throw new Exception("Book not found");
-            }
-
             // Query source book
             var sourceBook = await _context.Books.FirstOrDefaultAsync(b => b.Id == request.SourceId);
             if (sourceBook == null)
@@ -77,28 +80,44 @@ namespace Book.Dao.Repositories
                 throw new Exception("Book not found");
             }
 
-            // Swap book sort
-            (sourceBook.Id, destinationBook.Id) = (destinationBook.Id, sourceBook.Id);
-
-            // 如果目標書籍 id 大於來源書籍 id，則將來源書籍 id 到目標書籍 id 之間的書籍 id 減 -1
-            if (destinationBook.Id > sourceBook.Id)
+            // Query destination book
+            var destinationBook = await _context.Books
+                .Select(b => new { b.Id, b.Sort })
+                .FirstOrDefaultAsync(b => b.Id == request.DestinationId);
+            if (destinationBook == null)
             {
-                var books = await _context.Books.Where(b => b.Id > sourceBook.Id && b.Id <= destinationBook.Id).ToListAsync();
+                throw new Exception("Book not found");
+            }
+
+            // 如果目標書籍 Sort 大於來源書籍 Sort，則將中間書籍 Sort 減 -1
+            if (destinationBook.Sort > sourceBook.Sort)
+            {
+                var books = await _context.Books
+                    .Where(b => b.Sort > sourceBook.Sort
+                        && b.Sort <= destinationBook.Sort)
+                    .ToListAsync();
+
                 foreach (var book in books)
                 {
-                    book.Id--;
+                    book.Sort -= 1;
                 }
             }
-            // 如果目標書籍 id 小於來源書籍 id，則將來源書籍 id 到目標書籍 id 之間的書籍 id 加 1
+            // 如果目標書籍 Sort 小於來源書籍 Sort，則將中間書籍 Sort 加 1
             else
             {
-                var books = await _context.Books.Where(b => b.Id < sourceBook.Id && b.Id >= destinationBook.Id).ToListAsync();
+                var books = await _context.Books
+                    .Where(b => b.Sort < sourceBook.Sort
+                        && b.Sort >= destinationBook.Sort)
+                    .ToListAsync();
+
                 foreach (var book in books)
                 {
-                    book.Id++;
+                    book.Sort += 1;
                 }
             }
 
+            // Modify source Sort to destination Sort
+            sourceBook.Sort = destinationBook.Sort;
         }
 
         public async Task DeleteBook(int id)
