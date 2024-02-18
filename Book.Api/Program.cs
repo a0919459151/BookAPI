@@ -1,9 +1,18 @@
+using Book.Service;
+using Book.Dao;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+var configuration = builder.Configuration;
+builder.Services
+    .AddBookService()
+    .AddBookDao(configuration);
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
