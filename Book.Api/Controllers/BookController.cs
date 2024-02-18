@@ -31,7 +31,6 @@ namespace Book.Api.Controllers
             return Ok(book);
         }
 
-
         // Create book
         [HttpPost]
         public async Task<IActionResult> CreateBook(CreateBookRequestDto request)
@@ -52,7 +51,8 @@ namespace Book.Api.Controllers
         [HttpPut("Sort")]
         public async Task<IActionResult> SortBook([FromBody] SortBookRequestDto request)
         {
-            return Ok();
+            await _bookService.SortBook(request);
+            return NoContent();
         }
 
         // Delete book

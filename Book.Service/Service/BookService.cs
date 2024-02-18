@@ -59,7 +59,9 @@ namespace Book.Service.Service
 
         public async Task SortBook(SortBookRequestDto request)
         {
-            throw new NotImplementedException();
+            await _bookReposotory.SortBook(request);
+
+            await _unitOfWork.SaveChanges();
         }
 
         public async Task DeleteBook(int id)

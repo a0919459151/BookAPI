@@ -5,11 +5,16 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Book.Api", "Book.Api\Book.Api.csproj", "{2D64FE43-C926-4B99-80CF-15F0DA3DFDC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Book.Model", "Book.Model\Book.Model.csproj", "{EF01EF6A-F872-4ED2-96EE-D578D8580F83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Book.Model", "Book.Model\Book.Model.csproj", "{EF01EF6A-F872-4ED2-96EE-D578D8580F83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Book.Service", "Book.Service\Book.Service.csproj", "{18F9ECDF-BA9A-4DD0-A328-AA8E79A7CEF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Book.Service", "Book.Service\Book.Service.csproj", "{18F9ECDF-BA9A-4DD0-A328-AA8E79A7CEF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Book.Dao", "Book.Dao\Book.Dao.csproj", "{F98E6672-8C8D-48B2-83A8-4F3A4DDDE215}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Book.Dao", "Book.Dao\Book.Dao.csproj", "{F98E6672-8C8D-48B2-83A8-4F3A4DDDE215}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4411C25B-A985-4B17-8D1E-E964F4C9C7FF}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
